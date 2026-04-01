@@ -48,7 +48,7 @@ export default function CadastrarClientes() {
 
     return(
         <>
-            <h1 className='text-center'>Cadastrar Cliente</h1>
+            <h1 className='text-center'>Cadastrar Clientes</h1>
             <div className='w-full flex items-center justify-center'>
                 <form onSubmit={handleSubmit(onSubmit)} noValidate className='grid grid-cols-12 space-y-6 space-x-2'>
                     <Input 
