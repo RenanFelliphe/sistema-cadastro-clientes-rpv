@@ -1,3 +1,17 @@
 {
-    "clientes": []
+  "clientes": [
+    {
+      "nome": "Daniel Ventura 2",
+      "email": "danielvalmeida91@gmail.com",
+      "cpfcnpj": "12345678900",
+      "sexo": "M",
+      "cep": "36770066",
+      "rua": "Rua Joaquim Peixoto Ramos",
+      "bairro": "Centro",
+      "cidade": "Cataguases",
+      "estado": "MG",
+      "numero": "12",
+      "complemento": "201"
+    }
+  ]
 }

@@ -47,8 +47,18 @@ export default function CadastrarClientes() {
         }
     })
 
-    function onSubmit(data: FormType){
+    async function onSubmit(data: FormType){
         console.log('DATA DENTRO DO ONSUBMIT', data)
+
+        const response = await fetch('/api/create/clientes', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+        const json = await response.json()
+        console.log('response', json)
     }
     // console.log('Error', errors)
 
