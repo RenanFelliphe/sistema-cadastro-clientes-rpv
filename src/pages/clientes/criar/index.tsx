@@ -4,7 +4,7 @@ import { InputMask } from '@/components/InputMask'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-
+import { useState } from 'react'
 const DEFAULT_MESSAGE_RULE = "Campo obrigatório."
 
 function isCpfOrCnpj(value: string) {
@@ -13,50 +13,40 @@ function isCpfOrCnpj(value: string) {
 }
 
 const regras = z.object({
-        nome: z.string().min(1, DEFAULT_MESSAGE_RULE),
-        email: z.email(DEFAULT_MESSAGE_RULE),
-        cpfcnpj: z.string()
-            .min(1, DEFAULT_MESSAGE_RULE)
-            .max(18, "Limite de 18 caracteres")
-            .refine(isCpfOrCnpj, "Informe um CPF ou CNPJ válido."),
-        sexo: z.string().min(1, DEFAULT_MESSAGE_RULE).max(1, "Limite de 1 caracteres."),
-        cep: z.string().min(1, DEFAULT_MESSAGE_RULE)
-            .max(9, "Cep inválido."),
-        rua: z.string().min(1, DEFAULT_MESSAGE_RULE),
-        bairro: z.string().min(1, DEFAULT_MESSAGE_RULE),
-        cidade: z.string().min(1, DEFAULT_MESSAGE_RULE),
-        estado: z.string().min(1, DEFAULT_MESSAGE_RULE),
-        numero: z.string().min(1, DEFAULT_MESSAGE_RULE),
-        complemento: z.string().min(1, DEFAULT_MESSAGE_RULE),
-    })
+    nome: z.string().min(1, DEFAULT_MESSAGE_RULE),
+    email: z.email(DEFAULT_MESSAGE_RULE),
+    cpfcnpj: z.string()
+        .min(1, DEFAULT_MESSAGE_RULE)
+        .max(18, "Limite de 18 caracteres")
+        .refine(isCpfOrCnpj, "Informe um CPF ou CNPJ válido."),
+    sexo: z.string().min(1, DEFAULT_MESSAGE_RULE).max(1, "Limite de 1 caracteres."),
+    cep: z.string().min(1, DEFAULT_MESSAGE_RULE)
+        .max(9, "Cep inválido."),
+    rua: z.string().min(1, DEFAULT_MESSAGE_RULE),
+    bairro: z.string().min(1, DEFAULT_MESSAGE_RULE),
+    cidade: z.string().min(1, DEFAULT_MESSAGE_RULE),
+    estado: z.string().min(1, DEFAULT_MESSAGE_RULE),
+    numero: z.string().min(1, DEFAULT_MESSAGE_RULE),
+    complemento: z.string().min(1, DEFAULT_MESSAGE_RULE),
+})
 
-    export type FormType = z.infer<typeof regras>
+export type FormType = z.infer<typeof regras>
 
 export default function CadastrarClientes() {
+    const [showModal, setShowModal] = useState(false)
+
     const {
         handleSubmit,
         register,
         formState: { errors },
-        setError,
+        setError,   
         watch,
-        setValue
+        setValue,
+        reset
     } = useForm<FormType>({
         resolver: zodResolver(regras),
-        // defaultValues: {
-        //     nome: "Daniel Ventura",
-        //     email: "danielvalmeida91@gmail.com",
-        //     cpfcnpj: "12345678900",
-        //     sexo: "M",
-        //     cep: "36770066",
-        //     rua: "Rua Joaquim Peixoto Ramos",
-        //     bairro: "Centro",
-        //     cidade: "Cataguases",
-        //     estado: "MG",
-        //     numero: "12",
-        //     complemento: "201"
-        // }
     })
-    console.log('errors', errors)
+    
     async function onSubmit(data: FormType){
         const response = await fetch('/api/create/clientes', {
             method: "POST",
@@ -66,9 +56,16 @@ export default function CadastrarClientes() {
             body: JSON.stringify(data)
         })
         const json = await response.json()
-        console.log('response', json)
+
+        //showModal === false && setShowModal(!showModal)
+
+        if(response){
+            const message = "Usuário cadastrado com Sucesso"
+        } else {
+            const message = "Não foi possível cadastrar o usuário"
+        }
+        
     }
-    // console.log('Error', errors)
 
     async function buscaCep(){
         const cep = watch('cep')
@@ -90,7 +87,6 @@ export default function CadastrarClientes() {
             console.error('error', error)
         }
     }
-
 
     return(
         <>
@@ -197,6 +193,22 @@ export default function CadastrarClientes() {
                     </div>
                 </form>
             </div>
+            {
+                showModal && (
+                    <div className='bg-black/30 z-999 h-screen w-full flex items-center justify-center fixed top-0 left-0'>
+                        <div className='relative text-bolder text-[1.3rem] gap-5 bg-white w-100 h-50 flex flex-col items-center justify-center text-black rounded-xl border border-slate-400 shadow-md shadow-gray-700'>
+                            <h1>Confimação de Registro</h1>
+                            <div className='flex flex-col items-center justify-center gap-5'>
+                                <p className='text-gray-400 text-sm'>{/*MENSAGEM DE RETORNO ONSUBMIT*/}</p>
+                                <button className='rounded-md border px-3 border border-green-400 text-green-400 cursor-pointer' onClick={() => { 
+                                    setShowModal(!showModal) 
+                                    reset()
+                                }}>OK</button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
         </>
     )
 }

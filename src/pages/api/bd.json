@@ -25,6 +25,19 @@
       "estado": "MG",
       "numero": "401",
       "complemento": "Casa Rosa"
+    },
+    {
+      "nome": "RENAN FELLIPHE DE MOURA DIOGO SILVA",
+      "email": "0001184172@senaimgaluno.com.br",
+      "cpfcnpj": "139.848.336-28",
+      "sexo": "M",
+      "cep": "36772-160",
+      "rua": "dsadsadsasada",
+      "bairro": "Paraíso",
+      "cidade": "Cataguases",
+      "estado": "MG",
+      "numero": "81",
+      "complemento": "36772-160"
     }
   ]
 }
